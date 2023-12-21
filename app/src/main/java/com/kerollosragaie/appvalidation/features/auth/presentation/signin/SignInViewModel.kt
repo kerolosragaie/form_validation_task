@@ -5,8 +5,6 @@ import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidationView
 import com.kerollosragaie.appvalidation.core.utils.validation.interfaces.TextFieldId
 import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel

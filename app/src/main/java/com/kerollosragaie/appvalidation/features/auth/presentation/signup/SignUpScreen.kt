@@ -30,23 +30,16 @@ import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationRe
 
 @Composable
 fun SignUpScreen(
-    navigateToSignIn: () -> Unit,
+    navigateToSignIn: (SingUpViewModel) -> Unit,
 ) {
     val viewModel: SingUpViewModel = hiltViewModel()
     val context = LocalContext.current
 
     LaunchedEffect(context) {
-        viewModel.validationEvent.collect {resultEvent->
-            when (resultEvent) {
-                ValidationResultEvent.Failure -> {
-                    Toast.makeText(context, R.string.sign_up_failure, Toast.LENGTH_LONG)
-                        .show()
-                }
-
-                ValidationResultEvent.Success -> {
-                    Toast.makeText(context, R.string.sign_up_success, Toast.LENGTH_LONG)
-                        .show()
-                }
+        viewModel.validationEvent.collect { resultEvent ->
+            if (resultEvent == ValidationResultEvent.Success) {
+                Toast.makeText(context, R.string.sign_up_success, Toast.LENGTH_LONG)
+                    .show()
             }
         }
     }
@@ -62,7 +55,7 @@ fun SignUpScreen(
         IconButton(
             modifier = Modifier
                 .align(Alignment.Start),
-            onClick = navigateToSignIn,
+            onClick = { navigateToSignIn.invoke(viewModel) },
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_back),

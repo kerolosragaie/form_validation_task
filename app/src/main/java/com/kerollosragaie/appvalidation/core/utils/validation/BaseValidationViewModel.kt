@@ -12,16 +12,18 @@ import com.kerollosragaie.appvalidation.core.utils.validation.usecase.ValidateNu
 import com.kerollosragaie.appvalidation.core.utils.validation.usecase.ValidatePassword
 import com.kerollosragaie.appvalidation.core.utils.validation.usecase.ValidateText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 open class BaseValidationViewModel @Inject constructor() : ViewModel() {
     val forms = mutableStateMapOf<TextFieldId, ValidationState>()
-    private val validationEventChannel = Channel<ValidationResultEvent>()
-    val validationEvent = validationEventChannel.receiveAsFlow()
+
+    private val _validationEvent: MutableSharedFlow<ValidationResultEvent?> = MutableSharedFlow(0)
+    val validationEvent : SharedFlow<ValidationResultEvent?> = _validationEvent
 
     fun onEvent(event: ValidationEvent) {
         when (event) {
@@ -62,9 +64,7 @@ open class BaseValidationViewModel @Inject constructor() : ViewModel() {
 
         viewModelScope.launch {
             if (isValidForm) {
-                validationEventChannel.send(ValidationResultEvent.Success)
-            } else {
-                validationEventChannel.send(ValidationResultEvent.Failure)
+                _validationEvent.emit(ValidationResultEvent.Success)
             }
         }
 

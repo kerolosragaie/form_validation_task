@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
@@ -32,28 +34,25 @@ import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationEvent
 import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationResultEvent
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.take
 
 @Composable
 fun SignInScreen(
-    navigateToSignUp: () -> Unit,
+    navigateToSignUp: (SignInViewModel) -> Unit,
 ) {
     val viewModel: SignInViewModel = hiltViewModel()
     val context = LocalContext.current
 
     LaunchedEffect(context) {
-        viewModel.validationEvent.collect { resultEvent ->
-            when (resultEvent) {
-                ValidationResultEvent.Failure -> {
-                    Toast.makeText(context, R.string.sign_in_failure, Toast.LENGTH_LONG)
-                        .show()
-                }
-
-                ValidationResultEvent.Success -> {
+        viewModel.validationEvent
+            .collect { resultEvent ->
+                if (resultEvent == ValidationResultEvent.Success) {
                     Toast.makeText(context, R.string.sign_in_success, Toast.LENGTH_LONG)
                         .show()
                 }
             }
-        }
     }
 
     Column(
@@ -131,7 +130,7 @@ fun SignInScreen(
         Spacer(modifier = Modifier.height(15.dp))
 
         Row(
-            modifier = Modifier.clickable { navigateToSignUp.invoke() }
+            modifier = Modifier.clickable { navigateToSignUp.invoke(viewModel) }
         ) {
             Text(
                 text = stringResource(id = R.string.do_not_have_an_account)

@@ -1,6 +1,5 @@
 package com.kerollosragaie.appvalidation.core.navigation
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
@@ -45,7 +44,7 @@ fun NavigationGraph(
                 )
             },
         ) {
-            SignInScreen {
+            SignInScreen { _ ->
                 navHostController.navigate(Screen.SignUpScreen.route)
             }
         }
@@ -53,7 +52,7 @@ fun NavigationGraph(
         composable(
             route = Screen.SignUpScreen.route,
         ) {
-            SignUpScreen {
+            SignUpScreen { _ ->
                 navHostController.popBackStack()
             }
         }
