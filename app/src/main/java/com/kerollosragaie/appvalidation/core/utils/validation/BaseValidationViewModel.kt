@@ -21,7 +21,7 @@ import javax.inject.Inject
 open class BaseValidationViewModel @Inject constructor() : ViewModel() {
     val forms = mutableStateMapOf<TextFieldId, ValidationState>()
 
-    private val _validationEvent: MutableSharedFlow<ValidationResultEvent?> = MutableSharedFlow(0)
+    private val _validationEvent: MutableSharedFlow<ValidationResultEvent?> = MutableSharedFlow()
     val validationEvent : SharedFlow<ValidationResultEvent?> = _validationEvent
 
     fun onEvent(event: ValidationEvent) {

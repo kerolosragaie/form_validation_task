@@ -24,6 +24,8 @@ class SingUpViewModel @Inject constructor() : BaseValidationViewModel() {
         textFieldType = TextFieldType.Password,
     )
 
+    var isSubmitted: Boolean = false
+
     init {
         forms[SignUpTextFieldId.FULL_NAME] = fullNameValidationState
         forms[SignUpTextFieldId.MOBILE_NUMBER] = mobileNumberValidationState

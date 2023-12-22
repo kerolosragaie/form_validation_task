@@ -37,9 +37,10 @@ fun SignUpScreen(
 
     LaunchedEffect(context) {
         viewModel.validationEvent.collect { resultEvent ->
-            if (resultEvent == ValidationResultEvent.Success) {
+            if (resultEvent == ValidationResultEvent.Success && !viewModel.isSubmitted) {
                 Toast.makeText(context, R.string.sign_up_success, Toast.LENGTH_LONG)
                     .show()
+                viewModel.isSubmitted = true
             }
         }
     }
