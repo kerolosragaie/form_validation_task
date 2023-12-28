@@ -35,9 +35,9 @@ import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationRe
 
 @Composable
 fun SignInScreen(
+    viewModel: SignInViewModel = hiltViewModel(),
     navigateToSignUp: () -> Unit,
 ) {
-    val viewModel: SignInViewModel = hiltViewModel()
     val context = LocalContext.current
 
     LaunchedEffect(context) {
