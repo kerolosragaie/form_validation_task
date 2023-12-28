@@ -30,7 +30,7 @@ import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationRe
 
 @Composable
 fun SignUpScreen(
-    navigateToSignIn: (SingUpViewModel) -> Unit,
+    navigateToSignIn: () -> Unit,
 ) {
     val viewModel: SingUpViewModel = hiltViewModel()
     val context = LocalContext.current
@@ -56,7 +56,7 @@ fun SignUpScreen(
         IconButton(
             modifier = Modifier
                 .align(Alignment.Start),
-            onClick = { navigateToSignIn.invoke(viewModel) },
+            onClick = { navigateToSignIn.invoke() },
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_back),

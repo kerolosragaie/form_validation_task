@@ -44,7 +44,7 @@ fun NavigationGraph(
                 )
             },
         ) {
-            SignInScreen { _ ->
+            SignInScreen {
                 navHostController.navigate(Screen.SignUpScreen.route)
             }
         }
@@ -52,7 +52,7 @@ fun NavigationGraph(
         composable(
             route = Screen.SignUpScreen.route,
         ) {
-            SignUpScreen { _ ->
+            SignUpScreen {
                 navHostController.popBackStack()
             }
         }

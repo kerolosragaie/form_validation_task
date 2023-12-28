@@ -35,7 +35,7 @@ import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationRe
 
 @Composable
 fun SignInScreen(
-    navigateToSignUp: (SignInViewModel) -> Unit,
+    navigateToSignUp: () -> Unit,
 ) {
     val viewModel: SignInViewModel = hiltViewModel()
     val context = LocalContext.current
@@ -126,7 +126,7 @@ fun SignInScreen(
         Spacer(modifier = Modifier.height(15.dp))
 
         Row(
-            modifier = Modifier.clickable { navigateToSignUp.invoke(viewModel) }
+            modifier = Modifier.clickable { navigateToSignUp.invoke() }
         ) {
             Text(
                 text = stringResource(id = R.string.do_not_have_an_account)
