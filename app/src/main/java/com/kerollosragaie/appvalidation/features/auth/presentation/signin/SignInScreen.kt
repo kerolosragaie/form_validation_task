@@ -77,7 +77,8 @@ fun SignInScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            state = viewModel.forms[SignInTextFieldId.MOBILE_NUMBER]!!,
+            text = viewModel.forms[SignInTextFieldId.MOBILE_NUMBER]?.text.toString(),
+            errorMessageId = viewModel.forms[SignInTextFieldId.MOBILE_NUMBER]?.errorMessageId,
             hint = R.string.mobile_number,
             onValueChange = {
                 val mobileNumberField = viewModel.forms[SignInTextFieldId.MOBILE_NUMBER]!!
@@ -95,7 +96,8 @@ fun SignInScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            state = viewModel.forms[SignInTextFieldId.PASSWORD]!!,
+            text = viewModel.forms[SignInTextFieldId.PASSWORD]?.text.toString(),
+            errorMessageId = viewModel.forms[SignInTextFieldId.PASSWORD]?.errorMessageId,
             hint = R.string.password,
             onValueChange = {
                 val passwordField = viewModel.forms[SignInTextFieldId.PASSWORD]!!

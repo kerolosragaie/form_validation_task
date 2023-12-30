@@ -20,14 +20,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.kerollosragaie.appvalidation.R
 
 
 @Composable
 fun CustomButton(
-    modifier: Modifier,
-    enabled:Boolean,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     color: Color = MaterialTheme.colorScheme.primary,
     cornerRadius: Dp = 0.dp,
     onClick: () -> Unit,
@@ -37,8 +39,6 @@ fun CustomButton(
     borderColor: Color = color,
     gradient: Brush? = null
 ) {
-
-
     Button(
         onClick = onClick,
         modifier = modifier,
@@ -63,7 +63,15 @@ fun CustomButton(
                 Text(text = stringResource(id = textId), style = textStyle)
             }
         }
-
     }
+}
 
+
+@Preview(showBackground = true)
+@Composable
+fun PrevCustomButton() {
+    CustomButton(
+        textId = R.string.full_name,
+        onClick = {},
+    )
 }

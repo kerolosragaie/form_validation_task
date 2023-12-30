@@ -76,7 +76,8 @@ fun SignUpScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            state = viewModel.forms[SignUpTextFieldId.FULL_NAME]!!,
+            text = viewModel.forms[SignUpTextFieldId.FULL_NAME]?.text.toString(),
+            errorMessageId = viewModel.forms[SignUpTextFieldId.FULL_NAME]?.errorMessageId,
             hint = R.string.full_name,
             onValueChange = {
                 val fullNameField = viewModel.forms[SignUpTextFieldId.FULL_NAME]!!
@@ -93,7 +94,8 @@ fun SignUpScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            state = viewModel.forms[SignUpTextFieldId.MOBILE_NUMBER]!!,
+            text = viewModel.forms[SignUpTextFieldId.MOBILE_NUMBER]?.text.toString(),
+            errorMessageId = viewModel.forms[SignUpTextFieldId.MOBILE_NUMBER]?.errorMessageId,
             hint = R.string.mobile_number,
             onValueChange = {
                 val mobileNumberField = viewModel.forms[SignUpTextFieldId.MOBILE_NUMBER]!!
@@ -110,7 +112,8 @@ fun SignUpScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            state = viewModel.forms[SignUpTextFieldId.PASSWORD]!!,
+            text = viewModel.forms[SignUpTextFieldId.PASSWORD]?.text.toString(),
+            errorMessageId = viewModel.forms[SignUpTextFieldId.PASSWORD]?.errorMessageId,
             hint = R.string.password,
             onValueChange = {
                 val passwordField = viewModel.forms[SignUpTextFieldId.PASSWORD]!!

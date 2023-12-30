@@ -43,7 +43,8 @@ enum class TextFieldType {
 @Composable
 fun CustomTextField(
     modifier: Modifier,
-    state: ValidationState,
+    text: String,
+    @StringRes errorMessageId: Int? = null,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     @StringRes hint: Int,
     hintTextStyle: TextStyle = MaterialTheme.typography.bodySmall,
@@ -79,7 +80,7 @@ fun CustomTextField(
                 },
                 imeAction = ImeAction.Next,
             ),
-            value = state.text,
+            value = text,
             textStyle = textStyle,
             onValueChange = onValueChange,
             colors = TextFieldDefaults.textFieldColors(
@@ -110,18 +111,19 @@ fun CustomTextField(
             }
         )
 
-        if (state.hasError && state.errorMessageId != null) {
+        errorMessageId?.let {
             Text(
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .padding(top = 10.dp),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                text = stringResource(id = state.errorMessageId),
+                text = stringResource(id = it),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.titleSmall,
             )
         }
+
     }
 }
 
@@ -129,15 +131,9 @@ fun CustomTextField(
 @Preview
 @Composable
 fun PrevCustomTextField() {
-    val fakeState = ValidationState(
-        id = SignInTextFieldId.PASSWORD,
-        hasError = true,
-        errorMessageId = R.string.the_password_should_contain_at_least_special_character
-    )
-
     CustomTextField(
         modifier = Modifier.fillMaxWidth(0.85f),
-        state = fakeState,
+        text = "Password",
         hint = R.string.password,
         onValueChange = {},
         cornerRadius = 15.dp,
