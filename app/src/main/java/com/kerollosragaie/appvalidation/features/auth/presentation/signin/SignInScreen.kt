@@ -146,7 +146,9 @@ fun SignInScreen(
 @Preview(showBackground = true)
 @Composable
 fun PrevSignInScreen() {
+    val viewModel = SignInViewModel()
+
     AppValidationTheme {
-        SignInScreen {}
+        SignInScreen(viewModel = viewModel) {}
     }
 }

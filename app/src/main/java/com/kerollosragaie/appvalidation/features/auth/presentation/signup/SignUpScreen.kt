@@ -24,8 +24,10 @@ import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
+import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
 import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationEvent
 import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationResultEvent
+import com.kerollosragaie.appvalidation.features.auth.presentation.signin.SignInViewModel
 
 
 @Composable
@@ -146,6 +148,10 @@ fun SignUpScreen(
 @Preview(showBackground = true)
 @Composable
 fun PrevSignUp() {
-    SignUpScreen {}
+    val viewModel = SingUpViewModel()
+
+    AppValidationTheme {
+        SignUpScreen(viewModel = viewModel) {}
+    }
 }
 
