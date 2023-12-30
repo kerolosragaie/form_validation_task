@@ -30,6 +30,7 @@ import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
 import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
+import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
 import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationEvent
 import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationResultEvent
 
@@ -147,7 +148,10 @@ fun SignInScreen(
 @Preview(showBackground = true)
 @Composable
 fun PrevSignInScreen() {
+    val viewModel = SignInViewModel(baseValidation = BaseValidation())
     AppValidationTheme {
-        SignInScreen {}
+        SignInScreen(viewModel = viewModel) {
+
+        }
     }
 }
