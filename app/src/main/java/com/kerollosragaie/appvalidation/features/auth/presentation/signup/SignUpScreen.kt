@@ -34,9 +34,10 @@ fun SignUpScreen(
     navigateToSignIn: () -> Unit,
 ) {
     val context = LocalContext.current
+    val baseValidation = viewModel.baseValidation
 
     LaunchedEffect(context) {
-        viewModel.validationEvent.collect { resultEvent ->
+        baseValidation.validationEvent.collect { resultEvent ->
             if (resultEvent == ValidationResultEvent.Success && !viewModel.isSubmitted) {
                 Toast.makeText(context, R.string.sign_up_success, Toast.LENGTH_LONG)
                     .show()
@@ -76,12 +77,12 @@ fun SignUpScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = viewModel.forms[SignUpTextFieldId.FULL_NAME]?.text.toString(),
-            errorMessageId = viewModel.forms[SignUpTextFieldId.FULL_NAME]?.errorMessageId,
+            text = baseValidation.forms[SignUpTextFieldId.FULL_NAME]?.text.toString(),
+            errorMessageId = baseValidation.forms[SignUpTextFieldId.FULL_NAME]?.errorMessageId,
             hint = R.string.full_name,
             onValueChange = {
-                val fullNameField = viewModel.forms[SignUpTextFieldId.FULL_NAME]!!
-                viewModel.onEvent(
+                val fullNameField = baseValidation.forms[SignUpTextFieldId.FULL_NAME]!!
+                baseValidation.onEvent(
                     ValidationEvent.TextFieldValueChange(
                         fullNameField.copy(text = it)
                     )
@@ -94,12 +95,12 @@ fun SignUpScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = viewModel.forms[SignUpTextFieldId.MOBILE_NUMBER]?.text.toString(),
-            errorMessageId = viewModel.forms[SignUpTextFieldId.MOBILE_NUMBER]?.errorMessageId,
+            text = baseValidation.forms[SignUpTextFieldId.MOBILE_NUMBER]?.text.toString(),
+            errorMessageId = baseValidation.forms[SignUpTextFieldId.MOBILE_NUMBER]?.errorMessageId,
             hint = R.string.mobile_number,
             onValueChange = {
-                val mobileNumberField = viewModel.forms[SignUpTextFieldId.MOBILE_NUMBER]!!
-                viewModel.onEvent(
+                val mobileNumberField = baseValidation.forms[SignUpTextFieldId.MOBILE_NUMBER]!!
+                baseValidation.onEvent(
                     ValidationEvent.TextFieldValueChange(
                         mobileNumberField.copy(text = it)
                     )
@@ -112,12 +113,12 @@ fun SignUpScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = viewModel.forms[SignUpTextFieldId.PASSWORD]?.text.toString(),
-            errorMessageId = viewModel.forms[SignUpTextFieldId.PASSWORD]?.errorMessageId,
+            text = baseValidation.forms[SignUpTextFieldId.PASSWORD]?.text.toString(),
+            errorMessageId = baseValidation.forms[SignUpTextFieldId.PASSWORD]?.errorMessageId,
             hint = R.string.password,
             onValueChange = {
-                val passwordField = viewModel.forms[SignUpTextFieldId.PASSWORD]!!
-                viewModel.onEvent(
+                val passwordField = baseValidation.forms[SignUpTextFieldId.PASSWORD]!!
+                baseValidation.onEvent(
                     ValidationEvent.TextFieldValueChange(
                         passwordField.copy(text = it)
                     )
@@ -132,9 +133,9 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .height(50.dp),
-            enabled = viewModel.forms.all { !it.value.hasError },
+            enabled = baseValidation.forms.all { !it.value.hasError },
             onClick = {
-                viewModel.onEvent(ValidationEvent.Submit)
+                baseValidation.onEvent(ValidationEvent.Submit)
             },
             textId = R.string.sign_up,
             cornerRadius = 25.dp,

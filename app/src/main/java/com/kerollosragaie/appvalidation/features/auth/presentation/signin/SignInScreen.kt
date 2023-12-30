@@ -39,9 +39,10 @@ fun SignInScreen(
     navigateToSignUp: () -> Unit,
 ) {
     val context = LocalContext.current
+    val baseValidation = viewModel.baseValidation
 
     LaunchedEffect(context) {
-        viewModel.validationEvent
+        baseValidation.validationEvent
             .collect { resultEvent ->
                 if (resultEvent == ValidationResultEvent.Success && !viewModel.isSubmitted) {
                     Toast.makeText(context, R.string.sign_in_success, Toast.LENGTH_LONG)
@@ -77,12 +78,12 @@ fun SignInScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = viewModel.forms[SignInTextFieldId.MOBILE_NUMBER]?.text.toString(),
-            errorMessageId = viewModel.forms[SignInTextFieldId.MOBILE_NUMBER]?.errorMessageId,
+            text = baseValidation.forms[SignInTextFieldId.MOBILE_NUMBER]?.text.toString(),
+            errorMessageId = baseValidation.forms[SignInTextFieldId.MOBILE_NUMBER]?.errorMessageId,
             hint = R.string.mobile_number,
             onValueChange = {
-                val mobileNumberField = viewModel.forms[SignInTextFieldId.MOBILE_NUMBER]!!
-                viewModel.onEvent(
+                val mobileNumberField = baseValidation.forms[SignInTextFieldId.MOBILE_NUMBER]!!
+                baseValidation.onEvent(
                     ValidationEvent.TextFieldValueChange(
                         mobileNumberField.copy(text = it)
                     )
@@ -96,12 +97,12 @@ fun SignInScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = viewModel.forms[SignInTextFieldId.PASSWORD]?.text.toString(),
-            errorMessageId = viewModel.forms[SignInTextFieldId.PASSWORD]?.errorMessageId,
+            text = baseValidation.forms[SignInTextFieldId.PASSWORD]?.text.toString(),
+            errorMessageId = baseValidation.forms[SignInTextFieldId.PASSWORD]?.errorMessageId,
             hint = R.string.password,
             onValueChange = {
-                val passwordField = viewModel.forms[SignInTextFieldId.PASSWORD]!!
-                viewModel.onEvent(
+                val passwordField = baseValidation.forms[SignInTextFieldId.PASSWORD]!!
+                baseValidation.onEvent(
                     ValidationEvent.TextFieldValueChange(
                         passwordField.copy(text = it)
                     )
@@ -117,9 +118,9 @@ fun SignInScreen(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .height(50.dp),
-            enabled = viewModel.forms.all { !it.value.hasError },
+            enabled = baseValidation.forms.all { !it.value.hasError },
             onClick = {
-                viewModel.onEvent(ValidationEvent.Submit)
+                baseValidation.onEvent(ValidationEvent.Submit)
             },
             textId = R.string.login,
             cornerRadius = 25.dp,

@@ -1,8 +1,6 @@
 package com.kerollosragaie.appvalidation.core.utils.validation
 
 import androidx.compose.runtime.mutableStateMapOf
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationEvent
 import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationResultEvent
@@ -11,14 +9,13 @@ import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationSt
 import com.kerollosragaie.appvalidation.core.utils.validation.usecase.ValidateNumber
 import com.kerollosragaie.appvalidation.core.utils.validation.usecase.ValidatePassword
 import com.kerollosragaie.appvalidation.core.utils.validation.usecase.ValidateText
-import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-open class BaseValidationViewModel @Inject constructor() : ViewModel() {
+class BaseValidation{
     val forms = mutableStateMapOf<TextFieldId, ValidationState>()
 
     private val _validationEvent: MutableSharedFlow<ValidationResultEvent?> = MutableSharedFlow()
@@ -61,12 +58,11 @@ open class BaseValidationViewModel @Inject constructor() : ViewModel() {
             }
         }
 
-        viewModelScope.launch {
+        CoroutineScope(Dispatchers.Main).launch {
             if (isValidForm) {
                 _validationEvent.emit(ValidationResultEvent.Success)
             }
         }
 
     }
-
 }
