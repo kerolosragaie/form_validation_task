@@ -11,7 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SingUpViewModel @Inject constructor(
     val baseValidation: BaseValidation,
-    ) : ViewModel() {
+) : ViewModel() {
     private val fullNameValidationState = ValidationState(
         id = SignUpTextFieldId.FULL_NAME,
         textFieldType = TextFieldType.Text,
@@ -30,9 +30,11 @@ class SingUpViewModel @Inject constructor(
     var isSubmitted: Boolean = false
 
     init {
-        baseValidation.forms[SignUpTextFieldId.FULL_NAME] = fullNameValidationState
-        baseValidation.forms[SignUpTextFieldId.MOBILE_NUMBER] = mobileNumberValidationState
-        baseValidation.forms[SignUpTextFieldId.PASSWORD] = passwordValidationState
+        val updatedForm = baseValidation.forms.value.toMutableMap()
+        updatedForm[SignUpTextFieldId.FULL_NAME] = fullNameValidationState
+        updatedForm[SignUpTextFieldId.MOBILE_NUMBER] = mobileNumberValidationState
+        updatedForm[SignUpTextFieldId.PASSWORD] = passwordValidationState
+        baseValidation.forms.value = updatedForm
     }
 }
 

@@ -25,8 +25,10 @@ class SignInViewModel @Inject constructor(
 
 
     init {
-        baseValidation.forms[SignInTextFieldId.MOBILE_NUMBER] = mobNumberValidationState
-        baseValidation.forms[SignInTextFieldId.PASSWORD] = passwordValidationState
+        val updatedForm = baseValidation.forms.value.toMutableMap()
+        updatedForm[SignInTextFieldId.MOBILE_NUMBER] = mobNumberValidationState
+        updatedForm[SignInTextFieldId.PASSWORD] = passwordValidationState
+        baseValidation.forms.value = updatedForm
     }
 
 }

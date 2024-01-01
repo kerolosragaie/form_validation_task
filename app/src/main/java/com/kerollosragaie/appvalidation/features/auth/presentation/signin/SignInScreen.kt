@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
@@ -41,6 +42,7 @@ fun SignInScreen(
 ) {
     val context = LocalContext.current
     val baseValidation = viewModel.baseValidation
+    val forms = baseValidation.forms.collectAsStateWithLifecycle().value
 
     LaunchedEffect(context) {
         baseValidation.validationEvent
@@ -79,11 +81,11 @@ fun SignInScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = baseValidation.forms[SignInTextFieldId.MOBILE_NUMBER]?.text.toString(),
-            errorMessageId = baseValidation.forms[SignInTextFieldId.MOBILE_NUMBER]?.errorMessageId,
+            text = forms[SignInTextFieldId.MOBILE_NUMBER]?.text.toString(),
+            errorMessageId = forms[SignInTextFieldId.MOBILE_NUMBER]?.errorMessageId,
             hint = R.string.mobile_number,
             onValueChange = {
-                val mobileNumberField = baseValidation.forms[SignInTextFieldId.MOBILE_NUMBER]!!
+                val mobileNumberField = forms[SignInTextFieldId.MOBILE_NUMBER]!!
                 baseValidation.onEvent(
                     ValidationEvent.TextFieldValueChange(
                         mobileNumberField.copy(text = it)
@@ -98,11 +100,11 @@ fun SignInScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = baseValidation.forms[SignInTextFieldId.PASSWORD]?.text.toString(),
-            errorMessageId = baseValidation.forms[SignInTextFieldId.PASSWORD]?.errorMessageId,
+            text = forms[SignInTextFieldId.PASSWORD]?.text.toString(),
+            errorMessageId = forms[SignInTextFieldId.PASSWORD]?.errorMessageId,
             hint = R.string.password,
             onValueChange = {
-                val passwordField = baseValidation.forms[SignInTextFieldId.PASSWORD]!!
+                val passwordField = forms[SignInTextFieldId.PASSWORD]!!
                 baseValidation.onEvent(
                     ValidationEvent.TextFieldValueChange(
                         passwordField.copy(text = it)
@@ -119,7 +121,7 @@ fun SignInScreen(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .height(50.dp),
-            enabled = baseValidation.forms.all { !it.value.hasError },
+            enabled = forms.values.all { !it.hasError },
             onClick = {
                 baseValidation.onEvent(ValidationEvent.Submit)
             },
@@ -145,7 +147,7 @@ fun SignInScreen(
 }
 
 
-@Preview(showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
 fun PrevSignInScreen() {
     val viewModel = SignInViewModel(baseValidation = BaseValidation())
