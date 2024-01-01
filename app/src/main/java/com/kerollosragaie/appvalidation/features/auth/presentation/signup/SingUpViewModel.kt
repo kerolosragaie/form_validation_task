@@ -5,7 +5,6 @@ import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
 import com.kerollosragaie.appvalidation.core.utils.validation.interfaces.TextFieldId
 import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationState
-import com.kerollosragaie.appvalidation.features.auth.presentation.signin.SignInTextFieldId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
