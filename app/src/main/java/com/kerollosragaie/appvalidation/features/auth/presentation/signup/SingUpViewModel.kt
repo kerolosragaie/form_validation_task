@@ -5,6 +5,7 @@ import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
 import com.kerollosragaie.appvalidation.core.utils.validation.interfaces.TextFieldId
 import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationState
+import com.kerollosragaie.appvalidation.features.auth.presentation.signin.SignInTextFieldId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -30,11 +31,18 @@ class SingUpViewModel @Inject constructor(
     var isSubmitted: Boolean = false
 
     init {
-        val updatedForm = baseValidation.forms.value.toMutableMap()
-        updatedForm[SignUpTextFieldId.FULL_NAME] = fullNameValidationState
-        updatedForm[SignUpTextFieldId.MOBILE_NUMBER] = mobileNumberValidationState
-        updatedForm[SignUpTextFieldId.PASSWORD] = passwordValidationState
-        baseValidation.forms.value = updatedForm
+        baseValidation.addValidationStateToForm(
+            SignUpTextFieldId.FULL_NAME,
+            fullNameValidationState,
+        )
+        baseValidation.addValidationStateToForm(
+            SignUpTextFieldId.MOBILE_NUMBER,
+            mobileNumberValidationState,
+        )
+        baseValidation.addValidationStateToForm(
+            SignUpTextFieldId.PASSWORD,
+            passwordValidationState,
+        )
     }
 }
 

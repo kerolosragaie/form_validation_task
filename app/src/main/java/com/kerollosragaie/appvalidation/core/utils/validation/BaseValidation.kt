@@ -13,11 +13,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class BaseValidation {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    val forms = MutableStateFlow<Map<TextFieldId, ValidationState>>(emptyMap())
+
+    private val _forms: MutableStateFlow<Map<TextFieldId, ValidationState>> by lazy {
+        MutableStateFlow(
+            emptyMap()
+        )
+    }
+    val forms: StateFlow<Map<TextFieldId, ValidationState>> by lazy { _forms }
 
     private val _validationEvent: MutableSharedFlow<ValidationResultEvent?> = MutableSharedFlow()
     val validationEvent: SharedFlow<ValidationResultEvent?> = _validationEvent
@@ -32,7 +39,7 @@ class BaseValidation {
                 }
                 val validationResult = validatorType.execute(event.validationState.text.trim())
                 coroutineScope.launch {
-                    val updatedForms = forms.value.toMutableMap()
+                    val updatedForms = _forms.value.toMutableMap()
                     updatedForms[event.validationState.id] = if (validationResult.isValid) {
                         event.validationState.copy(
                             hasError = false,
@@ -44,10 +51,12 @@ class BaseValidation {
                             errorMessageId = validationResult.errorMessageId,
                         )
                     }
-                    forms.emit(updatedForms)
+                    _forms.run {
+                        value = updatedForms
+                        emit(value)
+                    }
                 }
             }
-
             is ValidationEvent.Submit -> isValidForm()
         }
     }
@@ -68,6 +77,11 @@ class BaseValidation {
                 _validationEvent.emit(ValidationResultEvent.Success)
             }
         }
+    }
 
+    fun addValidationStateToForm(textFieldId: TextFieldId, validationState: ValidationState) {
+        val updatedForm = _forms.value.toMutableMap()
+        updatedForm[textFieldId] = validationState
+        _forms.value = updatedForm
     }
 }
