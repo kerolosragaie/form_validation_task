@@ -25,11 +25,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
 import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
+import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
 import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationEvent
 import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationResultEvent
 
@@ -39,9 +41,11 @@ fun SignInScreen(
     navigateToSignUp: () -> Unit,
 ) {
     val context = LocalContext.current
+    val baseValidation = viewModel.baseValidation
+    val forms = baseValidation.forms.collectAsStateWithLifecycle().value
 
     LaunchedEffect(context) {
-        viewModel.validationEvent
+        baseValidation.validationEvent
             .collect { resultEvent ->
                 if (resultEvent == ValidationResultEvent.Success && !viewModel.isSubmitted) {
                     Toast.makeText(context, R.string.sign_in_success, Toast.LENGTH_LONG)
@@ -77,12 +81,12 @@ fun SignInScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = viewModel.forms[SignInTextFieldId.MOBILE_NUMBER]?.text.toString(),
-            errorMessageId = viewModel.forms[SignInTextFieldId.MOBILE_NUMBER]?.errorMessageId,
+            text = forms[SignInTextFieldId.MOBILE_NUMBER]?.text.toString(),
+            errorMessageId = forms[SignInTextFieldId.MOBILE_NUMBER]?.errorMessageId,
             hint = R.string.mobile_number,
             onValueChange = {
-                val mobileNumberField = viewModel.forms[SignInTextFieldId.MOBILE_NUMBER]!!
-                viewModel.onEvent(
+                val mobileNumberField = forms[SignInTextFieldId.MOBILE_NUMBER]!!
+                baseValidation.onEvent(
                     ValidationEvent.TextFieldValueChange(
                         mobileNumberField.copy(text = it)
                     )
@@ -96,12 +100,12 @@ fun SignInScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = viewModel.forms[SignInTextFieldId.PASSWORD]?.text.toString(),
-            errorMessageId = viewModel.forms[SignInTextFieldId.PASSWORD]?.errorMessageId,
+            text = forms[SignInTextFieldId.PASSWORD]?.text.toString(),
+            errorMessageId = forms[SignInTextFieldId.PASSWORD]?.errorMessageId,
             hint = R.string.password,
             onValueChange = {
-                val passwordField = viewModel.forms[SignInTextFieldId.PASSWORD]!!
-                viewModel.onEvent(
+                val passwordField = forms[SignInTextFieldId.PASSWORD]!!
+                baseValidation.onEvent(
                     ValidationEvent.TextFieldValueChange(
                         passwordField.copy(text = it)
                     )
@@ -117,9 +121,9 @@ fun SignInScreen(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .height(50.dp),
-            enabled = viewModel.forms.all { !it.value.hasError },
+            enabled = forms.values.all { !it.hasError },
             onClick = {
-                viewModel.onEvent(ValidationEvent.Submit)
+                baseValidation.onEvent(ValidationEvent.Submit)
             },
             textId = R.string.login,
             cornerRadius = 25.dp,
@@ -143,12 +147,13 @@ fun SignInScreen(
 }
 
 
-@Preview(showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
 fun PrevSignInScreen() {
-    val viewModel = SignInViewModel()
-
+    val viewModel = SignInViewModel(baseValidation = BaseValidation())
     AppValidationTheme {
-        SignInScreen(viewModel = viewModel) {}
+        SignInScreen(viewModel = viewModel) {
+
+        }
     }
 }

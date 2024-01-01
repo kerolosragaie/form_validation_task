@@ -1,14 +1,17 @@
 package com.kerollosragaie.appvalidation.features.auth.presentation.signin
 
+import androidx.lifecycle.ViewModel
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
-import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidationViewModel
+import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
 import com.kerollosragaie.appvalidation.core.utils.validation.interfaces.TextFieldId
 import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @Inject constructor() : BaseValidationViewModel() {
+class SignInViewModel @Inject constructor(
+    val baseValidation: BaseValidation,
+) : ViewModel() {
     private var mobNumberValidationState = ValidationState(
         id = SignInTextFieldId.MOBILE_NUMBER,
         textFieldType = TextFieldType.Number,
@@ -22,8 +25,14 @@ class SignInViewModel @Inject constructor() : BaseValidationViewModel() {
 
 
     init {
-        forms[SignInTextFieldId.MOBILE_NUMBER] = mobNumberValidationState
-        forms[SignInTextFieldId.PASSWORD] = passwordValidationState
+        baseValidation.addValidationStateToForm(
+            SignInTextFieldId.MOBILE_NUMBER,
+            mobNumberValidationState,
+        )
+        baseValidation.addValidationStateToForm(
+            SignInTextFieldId.PASSWORD,
+            passwordValidationState,
+        )
     }
 
 }

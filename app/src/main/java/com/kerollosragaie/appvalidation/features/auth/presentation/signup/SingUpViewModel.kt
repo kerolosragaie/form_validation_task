@@ -1,14 +1,17 @@
 package com.kerollosragaie.appvalidation.features.auth.presentation.signup
 
+import androidx.lifecycle.ViewModel
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
-import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidationViewModel
+import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
 import com.kerollosragaie.appvalidation.core.utils.validation.interfaces.TextFieldId
 import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SingUpViewModel @Inject constructor() : BaseValidationViewModel() {
+class SingUpViewModel @Inject constructor(
+    val baseValidation: BaseValidation,
+) : ViewModel() {
     private val fullNameValidationState = ValidationState(
         id = SignUpTextFieldId.FULL_NAME,
         textFieldType = TextFieldType.Text,
@@ -27,9 +30,18 @@ class SingUpViewModel @Inject constructor() : BaseValidationViewModel() {
     var isSubmitted: Boolean = false
 
     init {
-        forms[SignUpTextFieldId.FULL_NAME] = fullNameValidationState
-        forms[SignUpTextFieldId.MOBILE_NUMBER] = mobileNumberValidationState
-        forms[SignUpTextFieldId.PASSWORD] = passwordValidationState
+        baseValidation.addValidationStateToForm(
+            SignUpTextFieldId.FULL_NAME,
+            fullNameValidationState,
+        )
+        baseValidation.addValidationStateToForm(
+            SignUpTextFieldId.MOBILE_NUMBER,
+            mobileNumberValidationState,
+        )
+        baseValidation.addValidationStateToForm(
+            SignUpTextFieldId.PASSWORD,
+            passwordValidationState,
+        )
     }
 }
 
