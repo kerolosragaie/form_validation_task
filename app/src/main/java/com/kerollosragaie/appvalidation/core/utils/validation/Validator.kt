@@ -6,7 +6,7 @@ import com.kerollosragaie.appvalidation.core.utils.validation.usecase.ValidateNu
 import com.kerollosragaie.appvalidation.core.utils.validation.usecase.ValidatePassword
 import com.kerollosragaie.appvalidation.core.utils.validation.usecase.ValidateText
 
-class BaseValidation {
+class Validator {
     fun validateTextField(
         text:String,
         textFormFieldType: TextFieldType=TextFieldType.Text,

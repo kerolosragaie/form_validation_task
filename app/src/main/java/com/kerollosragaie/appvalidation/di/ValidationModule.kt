@@ -1,6 +1,6 @@
 package com.kerollosragaie.appvalidation.di
 
-import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
+import com.kerollosragaie.appvalidation.core.utils.validation.Validator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,5 +13,5 @@ object ValidationModule {
 
     @Provides
     @Singleton
-    fun provideBaseValidation(): BaseValidation = BaseValidation()
+    fun provideValidator(): Validator = Validator()
 }

@@ -29,7 +29,7 @@ import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
 import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
-import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
+import com.kerollosragaie.appvalidation.core.utils.validation.Validator
 
 @Composable
 fun SignInScreen(
@@ -38,11 +38,11 @@ fun SignInScreen(
 ) {
     val context = LocalContext.current
 
-    val baseValidation = viewModel.baseValidation
+    val validator = viewModel.validator
     val mobNumberValidationResult =
-        baseValidation.validateTextField(viewModel.mobNumberText.value, TextFieldType.Number)
+        validator.validateTextField(viewModel.mobNumberText.value, TextFieldType.Number)
     val passwordValidationResult =
-        baseValidation.validateTextField(viewModel.passwordText.value, TextFieldType.Password)
+        validator.validateTextField(viewModel.passwordText.value, TextFieldType.Password)
 
     Column(
         modifier = Modifier
@@ -125,7 +125,7 @@ fun SignInScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PrevSignInScreen() {
-    val viewModel = SignInViewModel(baseValidation = BaseValidation())
+    val viewModel = SignInViewModel(validator = Validator())
     AppValidationTheme {
         SignInScreen(viewModel = viewModel) {
 

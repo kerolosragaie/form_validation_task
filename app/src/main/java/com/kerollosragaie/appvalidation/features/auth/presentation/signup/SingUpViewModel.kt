@@ -2,13 +2,13 @@ package com.kerollosragaie.appvalidation.features.auth.presentation.signup
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
+import com.kerollosragaie.appvalidation.core.utils.validation.Validator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SingUpViewModel @Inject constructor(
-    val baseValidation: BaseValidation,
+    val validator: Validator,
 ) : ViewModel() {
     val fullNameText = mutableStateOf("")
     val mobNumberText = mutableStateOf("")

@@ -25,7 +25,7 @@ import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
-import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
+import com.kerollosragaie.appvalidation.core.utils.validation.Validator
 
 @Composable
 fun SignUpScreen(
@@ -34,13 +34,13 @@ fun SignUpScreen(
 ) {
     val context = LocalContext.current
 
-    val baseValidation = viewModel.baseValidation
+    val validator = viewModel.validator
     val fullNameValidationResult =
-        baseValidation.validateTextField(viewModel.fullNameText.value)
+        validator.validateTextField(viewModel.fullNameText.value)
     val mobNumberValidationResult =
-        baseValidation.validateTextField(viewModel.mobNumberText.value, TextFieldType.Number)
+        validator.validateTextField(viewModel.mobNumberText.value, TextFieldType.Number)
     val passwordValidationResult =
-        baseValidation.validateTextField(viewModel.passwordText.value, TextFieldType.Password)
+        validator.validateTextField(viewModel.passwordText.value, TextFieldType.Password)
 
     Column(
         verticalArrangement = Arrangement.Top,
@@ -122,7 +122,7 @@ fun SignUpScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PrevSignUp() {
-    val viewModel = SingUpViewModel(baseValidation = BaseValidation())
+    val viewModel = SingUpViewModel(validator = Validator())
     AppValidationTheme {
         SignUpScreen(viewModel = viewModel) {
 
