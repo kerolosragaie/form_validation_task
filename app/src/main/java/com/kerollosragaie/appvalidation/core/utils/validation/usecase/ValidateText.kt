@@ -4,7 +4,7 @@ import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.utils.validation.interfaces.Validator
 import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationResultState
 
-class ValidateText : Validator {
+internal class ValidateText : Validator {
     override fun execute(text: String): ValidationResultState {
         return if (text.isBlank()) {
             ValidationResultState(

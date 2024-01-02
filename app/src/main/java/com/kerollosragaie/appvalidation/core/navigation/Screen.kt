@@ -4,6 +4,6 @@ import com.kerollosragaie.appvalidation.core.utils.Constants.SIGN_IN
 import com.kerollosragaie.appvalidation.core.utils.Constants.SIGN_UP
 
 sealed class Screen(val route:String){
-    object SignInScreen : Screen(SIGN_IN)
-    object SignUpScreen : Screen(SIGN_UP)
+    data object SignInScreen : Screen(SIGN_IN)
+    data object SignUpScreen : Screen(SIGN_UP)
 }

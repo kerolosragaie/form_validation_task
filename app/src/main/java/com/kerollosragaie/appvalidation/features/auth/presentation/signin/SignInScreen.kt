@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,15 +24,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
 import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
-import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationEvent
-import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationResultEvent
 
 @Composable
 fun SignInScreen(
@@ -41,19 +37,12 @@ fun SignInScreen(
     navigateToSignUp: () -> Unit,
 ) {
     val context = LocalContext.current
-    val baseValidation = viewModel.baseValidation
-    val forms = baseValidation.forms.collectAsStateWithLifecycle().value
 
-    LaunchedEffect(context) {
-        baseValidation.validationEvent
-            .collect { resultEvent ->
-                if (resultEvent == ValidationResultEvent.Success && !viewModel.isSubmitted) {
-                    Toast.makeText(context, R.string.sign_in_success, Toast.LENGTH_LONG)
-                        .show()
-                    viewModel.isSubmitted = true
-                }
-            }
-    }
+    val baseValidation = viewModel.baseValidation
+    val mobNumberValidationResult =
+        baseValidation.validateTextField(viewModel.mobNumberText.value, TextFieldType.Number)
+    val passwordValidationResult =
+        baseValidation.validateTextField(viewModel.passwordText.value, TextFieldType.Password)
 
     Column(
         modifier = Modifier
@@ -81,17 +70,10 @@ fun SignInScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = forms[SignInTextFieldId.MOBILE_NUMBER]?.text.toString(),
-            errorMessageId = forms[SignInTextFieldId.MOBILE_NUMBER]?.errorMessageId,
+            text = viewModel.mobNumberText.value,
+            errorMessageId = mobNumberValidationResult.errorMessageId,
             hint = R.string.mobile_number,
-            onValueChange = {
-                val mobileNumberField = forms[SignInTextFieldId.MOBILE_NUMBER]!!
-                baseValidation.onEvent(
-                    ValidationEvent.TextFieldValueChange(
-                        mobileNumberField.copy(text = it)
-                    )
-                )
-            },
+            onValueChange = { viewModel.mobNumberText.value = it },
             cornerRadius = 15.dp,
             type = TextFieldType.Number,
         )
@@ -100,17 +82,10 @@ fun SignInScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = forms[SignInTextFieldId.PASSWORD]?.text.toString(),
-            errorMessageId = forms[SignInTextFieldId.PASSWORD]?.errorMessageId,
+            text = viewModel.passwordText.value,
+            errorMessageId = passwordValidationResult.errorMessageId,
             hint = R.string.password,
-            onValueChange = {
-                val passwordField = forms[SignInTextFieldId.PASSWORD]!!
-                baseValidation.onEvent(
-                    ValidationEvent.TextFieldValueChange(
-                        passwordField.copy(text = it)
-                    )
-                )
-            },
+            onValueChange = { viewModel.passwordText.value = it },
             cornerRadius = 15.dp,
             type = TextFieldType.Password,
         )
@@ -121,9 +96,9 @@ fun SignInScreen(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .height(50.dp),
-            enabled = forms.values.all { !it.hasError },
+            enabled = mobNumberValidationResult.isValid && passwordValidationResult.isValid,
             onClick = {
-                baseValidation.onEvent(ValidationEvent.Submit)
+                Toast.makeText(context, R.string.sign_in_success, Toast.LENGTH_SHORT).show()
             },
             textId = R.string.login,
             cornerRadius = 25.dp,

@@ -20,16 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
 import com.kerollosragaie.appvalidation.core.utils.validation.BaseValidation
-import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationEvent
-import com.kerollosragaie.appvalidation.core.utils.validation.event.ValidationResultEvent
-
 
 @Composable
 fun SignUpScreen(
@@ -37,18 +33,14 @@ fun SignUpScreen(
     navigateToSignIn: () -> Unit,
 ) {
     val context = LocalContext.current
-    val baseValidation = viewModel.baseValidation
-    val forms = baseValidation.forms.collectAsStateWithLifecycle().value
 
-    LaunchedEffect(context) {
-        baseValidation.validationEvent.collect { resultEvent ->
-            if (resultEvent == ValidationResultEvent.Success && !viewModel.isSubmitted) {
-                Toast.makeText(context, R.string.sign_up_success, Toast.LENGTH_LONG)
-                    .show()
-                viewModel.isSubmitted = true
-            }
-        }
-    }
+    val baseValidation = viewModel.baseValidation
+    val fullNameValidationResult =
+        baseValidation.validateTextField(viewModel.fullNameText.value)
+    val mobNumberValidationResult =
+        baseValidation.validateTextField(viewModel.mobNumberText.value, TextFieldType.Number)
+    val passwordValidationResult =
+        baseValidation.validateTextField(viewModel.passwordText.value, TextFieldType.Password)
 
     Column(
         verticalArrangement = Arrangement.Top,
@@ -81,17 +73,10 @@ fun SignUpScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = forms[SignUpTextFieldId.FULL_NAME]?.text.toString(),
-            errorMessageId = forms[SignUpTextFieldId.FULL_NAME]?.errorMessageId,
+            text = viewModel.fullNameText.value,
+            errorMessageId = fullNameValidationResult.errorMessageId,
             hint = R.string.full_name,
-            onValueChange = {
-                val fullNameField = forms[SignUpTextFieldId.FULL_NAME]!!
-                baseValidation.onEvent(
-                    ValidationEvent.TextFieldValueChange(
-                        fullNameField.copy(text = it)
-                    )
-                )
-            },
+            onValueChange = { viewModel.fullNameText.value = it },
             type = TextFieldType.Text,
         )
 
@@ -99,17 +84,10 @@ fun SignUpScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = forms[SignUpTextFieldId.MOBILE_NUMBER]?.text.toString(),
-            errorMessageId = forms[SignUpTextFieldId.MOBILE_NUMBER]?.errorMessageId,
+            text = viewModel.mobNumberText.value,
+            errorMessageId = mobNumberValidationResult.errorMessageId,
             hint = R.string.mobile_number,
-            onValueChange = {
-                val mobileNumberField = forms[SignUpTextFieldId.MOBILE_NUMBER]!!
-                baseValidation.onEvent(
-                    ValidationEvent.TextFieldValueChange(
-                        mobileNumberField.copy(text = it)
-                    )
-                )
-            },
+            onValueChange = { viewModel.mobNumberText.value = it },
             type = TextFieldType.Number,
         )
 
@@ -117,17 +95,10 @@ fun SignUpScreen(
 
         CustomTextField(
             modifier = Modifier.fillMaxWidth(0.85f),
-            text = forms[SignUpTextFieldId.PASSWORD]?.text.toString(),
-            errorMessageId = forms[SignUpTextFieldId.PASSWORD]?.errorMessageId,
+            text = viewModel.passwordText.value,
+            errorMessageId = passwordValidationResult.errorMessageId,
             hint = R.string.password,
-            onValueChange = {
-                val passwordField = forms[SignUpTextFieldId.PASSWORD]!!
-                baseValidation.onEvent(
-                    ValidationEvent.TextFieldValueChange(
-                        passwordField.copy(text = it)
-                    )
-                )
-            },
+            onValueChange = { viewModel.passwordText.value = it },
             type = TextFieldType.Password,
         )
 
@@ -137,9 +108,9 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .height(50.dp),
-            enabled = forms.values.all { !it.hasError },
+            enabled = fullNameValidationResult.isValid && mobNumberValidationResult.isValid && passwordValidationResult.isValid,
             onClick = {
-                baseValidation.onEvent(ValidationEvent.Submit)
+                Toast.makeText(context, R.string.sign_up_success, Toast.LENGTH_SHORT).show()
             },
             textId = R.string.sign_up,
             cornerRadius = 25.dp,

@@ -5,7 +5,7 @@ import com.kerollosragaie.appvalidation.core.utils.validation.interfaces.Validat
 import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationResultState
 import java.util.regex.Pattern
 
-class ValidatePassword : Validator {
+internal class ValidatePassword : Validator {
     override fun execute(text: String): ValidationResultState {
         val isContainLettersAndDigits = text.any { it.isDigit() } && text.any { it.isLetter() }
         val specialChar: Pattern = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]")

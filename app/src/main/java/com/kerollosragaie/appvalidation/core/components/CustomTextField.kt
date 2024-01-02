@@ -30,8 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kerollosragaie.appvalidation.R
-import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationState
-import com.kerollosragaie.appvalidation.features.auth.presentation.signin.SignInTextFieldId
 
 enum class TextFieldType {
     Number,
