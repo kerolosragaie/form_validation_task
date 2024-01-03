@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationResultState
@@ -35,5 +34,4 @@ fun TextFormField(
         },
         type = textFieldType,
     )
-
 }
