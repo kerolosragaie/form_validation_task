@@ -7,23 +7,25 @@ import com.kerollosragaie.appvalidation.core.utils.validation.state.ValidationRe
 
 internal class ValidateNumber : Validator {
     override fun execute(text: String): ValidationResultState {
+        val validationResultState by lazy { ValidationResultState(isValid = false) }
+
         return if (text.isBlank()) {
-            ValidationResultState(
+            validationResultState.copy(
                 isValid = false,
-                errorMessageId = R.string.the_field_can_not_be_blank
+                errorMessageId = R.string.the_field_can_not_be_blank,
             )
         } else if (text.length != 11) {
-            ValidationResultState(
+            validationResultState.copy(
                 isValid = false,
                 errorMessageId = R.string.must_be_11_digits
             )
         } else if (!Patterns.PHONE.matcher(text).matches()) {
-            ValidationResultState(
+            validationResultState.copy(
                 isValid = false,
                 errorMessageId = R.string.that_is_not_a_valid_number
             )
         } else {
-            ValidationResultState(isValid = true)
+            validationResultState.copy(isValid = true)
         }
     }
 }

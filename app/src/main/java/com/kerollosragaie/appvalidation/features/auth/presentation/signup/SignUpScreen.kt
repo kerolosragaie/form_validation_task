@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomButton
-import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
 import com.kerollosragaie.appvalidation.core.utils.validation.Validator
+import com.kerollosragaie.appvalidation.features.auth.presentation.component.TextFormField
 
 @Composable
 fun SignUpScreen(
@@ -33,14 +33,18 @@ fun SignUpScreen(
     navigateToSignIn: () -> Unit,
 ) {
     val context = LocalContext.current
-
     val validator = viewModel.validator
-    val fullNameValidationResult =
-        validator.validateTextField(viewModel.fullNameText.value)
-    val mobNumberValidationResult =
-        validator.validateTextField(viewModel.mobNumberText.value, TextFieldType.Number)
-    val passwordValidationResult =
-        validator.validateTextField(viewModel.passwordText.value, TextFieldType.Password)
+    var isValidName by remember {
+        mutableStateOf(false)
+    }
+    var isValidMobile by remember {
+        mutableStateOf(false)
+    }
+    var isValidPassword by remember {
+        mutableStateOf(false)
+    }
+    val isValidForm: Boolean = isValidName && isValidMobile && isValidPassword
+
 
     Column(
         verticalArrangement = Arrangement.Top,
@@ -71,35 +75,28 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        CustomTextField(
-            modifier = Modifier.fillMaxWidth(0.85f),
-            text = viewModel.fullNameText.value,
-            errorMessageId = fullNameValidationResult.errorMessageId,
+        TextFormField(
             hint = R.string.full_name,
-            onValueChange = { viewModel.fullNameText.value = it },
-            type = TextFieldType.Text,
+            validateResult = { text -> validator.validateTextField(text) },
+            onValueChange = { isValid -> isValidName = isValid },
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        CustomTextField(
-            modifier = Modifier.fillMaxWidth(0.85f),
-            text = viewModel.mobNumberText.value,
-            errorMessageId = mobNumberValidationResult.errorMessageId,
+        TextFormField(
             hint = R.string.mobile_number,
-            onValueChange = { viewModel.mobNumberText.value = it },
-            type = TextFieldType.Number,
+            textFieldType = TextFieldType.Number,
+            validateResult = { text -> validator.validateTextField(text, TextFieldType.Number) },
+            onValueChange = { isValid -> isValidMobile = isValid }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        CustomTextField(
-            modifier = Modifier.fillMaxWidth(0.85f),
-            text = viewModel.passwordText.value,
-            errorMessageId = passwordValidationResult.errorMessageId,
+        TextFormField(
             hint = R.string.password,
-            onValueChange = { viewModel.passwordText.value = it },
-            type = TextFieldType.Password,
+            textFieldType = TextFieldType.Password,
+            validateResult = { text -> validator.validateTextField(text, TextFieldType.Password) },
+            onValueChange = { isValid -> isValidPassword = isValid }
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -108,7 +105,7 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxWidth(0.6f)
                 .height(50.dp),
-            enabled = fullNameValidationResult.isValid && mobNumberValidationResult.isValid && passwordValidationResult.isValid,
+            enabled = isValidForm,
             onClick = {
                 Toast.makeText(context, R.string.sign_up_success, Toast.LENGTH_SHORT).show()
             },

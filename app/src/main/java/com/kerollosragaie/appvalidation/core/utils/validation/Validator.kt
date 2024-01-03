@@ -8,14 +8,13 @@ import com.kerollosragaie.appvalidation.core.utils.validation.usecase.ValidateTe
 
 class Validator {
     fun validateTextField(
-        text:String,
-        textFormFieldType: TextFieldType=TextFieldType.Text,
-    ):ValidationResultState{
-        val validatorType = when(textFormFieldType){
-            TextFieldType.Number -> ValidateNumber()
-            TextFieldType.Password -> ValidatePassword()
-            TextFieldType.Text -> ValidateText()
-        }
-        return validatorType.execute(text.trim())
+        text: String,
+        textFormFieldType: TextFieldType = TextFieldType.Text,
+    ): ValidationResultState = when (textFormFieldType) {
+        TextFieldType.Number -> ValidateNumber()
+        TextFieldType.Password -> ValidatePassword()
+        TextFieldType.Text -> ValidateText()
+    }.run {
+        execute(text.trim())
     }
 }
