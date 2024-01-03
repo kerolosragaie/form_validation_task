@@ -31,9 +31,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
-import com.kerollosragaie.appvalidation.core.components.TextFieldType
-import com.kerollosragaie.appvalidation.core.utils.validation.Validator
-import com.kerollosragaie.appvalidation.features.auth.presentation.component.TextFormField
+import com.kerollosragaie.appvalidation.features.auth.presentation.component.MobNumberFormField
+import com.kerollosragaie.appvalidation.features.auth.presentation.component.PasswordFormField
 
 @Composable
 fun SignInScreen(
@@ -42,7 +41,6 @@ fun SignInScreen(
 ) {
     val context = LocalContext.current
 
-    val validator = viewModel.validator
     var isValidMobile by remember {
         mutableStateOf(false)
     }
@@ -75,20 +73,18 @@ fun SignInScreen(
         )
         Spacer(modifier = Modifier.height(10.dp))
 
-        TextFormField(
-            hint = R.string.mobile_number,
-            textFieldType = TextFieldType.Number,
-            validateResult = { text -> validator.validateTextField(text, TextFieldType.Number) },
-            onValueChange = { isValid -> isValidMobile = isValid }
+        MobNumberFormField(
+            onValueChange = { validationResultState ->
+                isValidMobile = validationResultState.isValid
+            },
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        TextFormField(
-            hint = R.string.password,
-            textFieldType = TextFieldType.Password,
-            validateResult = { text -> validator.validateTextField(text, TextFieldType.Password) },
-            onValueChange = { isValid -> isValidPassword = isValid }
+        PasswordFormField(
+            onValueChange = { validationResultState ->
+                isValidPassword = validationResultState.isValid
+            },
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -126,7 +122,7 @@ fun SignInScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PrevSignInScreen() {
-    val viewModel = SignInViewModel(validator = Validator())
+    val viewModel = SignInViewModel()
     AppValidationTheme {
         SignInScreen(viewModel = viewModel) {
 

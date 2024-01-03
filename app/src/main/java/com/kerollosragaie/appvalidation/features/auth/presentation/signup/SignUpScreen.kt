@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomButton
-import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
-import com.kerollosragaie.appvalidation.core.utils.validation.Validator
-import com.kerollosragaie.appvalidation.features.auth.presentation.component.TextFormField
+import com.kerollosragaie.appvalidation.features.auth.presentation.component.FullNameFormField
+import com.kerollosragaie.appvalidation.features.auth.presentation.component.MobNumberFormField
+import com.kerollosragaie.appvalidation.features.auth.presentation.component.PasswordFormField
 
 @Composable
 fun SignUpScreen(
@@ -33,7 +33,6 @@ fun SignUpScreen(
     navigateToSignIn: () -> Unit,
 ) {
     val context = LocalContext.current
-    val validator = viewModel.validator
     var isValidName by remember {
         mutableStateOf(false)
     }
@@ -75,28 +74,26 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        TextFormField(
-            hint = R.string.full_name,
-            validateResult = { text -> validator.validateTextField(text) },
-            onValueChange = { isValid -> isValidName = isValid },
+        FullNameFormField(
+            onValueChange = { validationResultState ->
+                isValidName = validationResultState.isValid
+            },
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        TextFormField(
-            hint = R.string.mobile_number,
-            textFieldType = TextFieldType.Number,
-            validateResult = { text -> validator.validateTextField(text, TextFieldType.Number) },
-            onValueChange = { isValid -> isValidMobile = isValid }
+        MobNumberFormField(
+            onValueChange = { validationResultState ->
+                isValidMobile = validationResultState.isValid
+            },
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        TextFormField(
-            hint = R.string.password,
-            textFieldType = TextFieldType.Password,
-            validateResult = { text -> validator.validateTextField(text, TextFieldType.Password) },
-            onValueChange = { isValid -> isValidPassword = isValid }
+        PasswordFormField(
+            onValueChange = { validationResultState ->
+                isValidPassword = validationResultState.isValid
+            },
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -119,7 +116,7 @@ fun SignUpScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PrevSignUp() {
-    val viewModel = SingUpViewModel(validator = Validator())
+    val viewModel = SingUpViewModel()
     AppValidationTheme {
         SignUpScreen(viewModel = viewModel) {
 
