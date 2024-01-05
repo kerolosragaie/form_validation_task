@@ -5,8 +5,11 @@ import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.utils.validation.enums.PasswordValidationType
 import com.kerollosragaie.appvalidation.core.utils.validation.interfaces.Validation
 import java.util.regex.Pattern
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class Validator : Validation {
+@Singleton
+class Validator @Inject constructor() : Validation {
 
     override fun handlePasswordValidation(
         text: String,
