@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kerollosragaie.appvalidation.R
@@ -92,13 +93,18 @@ fun MobNumberFormField(
 
 @Composable
 private fun ValidationText(@StringRes text: Int?) {
-
-    val color = if (text == null) Color.Green else Color.Red
+    val color = if (text == null)
+        Color.Green
+    else
+        MaterialTheme.colorScheme.error
 
     text?.let {
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-            text = stringResource(id = it),
+            modifier = Modifier.fillMaxWidth(0.8f),
+            text = stringResource(id = text),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             color = color,
         )
     }

@@ -4,7 +4,9 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -37,7 +39,6 @@ enum class TextFieldType {
     Text,
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTextField(
     modifier: Modifier,
@@ -110,15 +111,14 @@ fun CustomTextField(
         )
 
         errorMessageId?.let {
+            Spacer(modifier = Modifier.height(2.dp))
             Text(
                 modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .padding(top = 10.dp),
+                    .fillMaxWidth(0.8f),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 text = stringResource(id = it),
                 color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.titleSmall,
             )
         }
 

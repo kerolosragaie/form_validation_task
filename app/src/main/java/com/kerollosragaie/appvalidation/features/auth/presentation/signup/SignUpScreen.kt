@@ -45,7 +45,6 @@ fun SignUpScreen(
     }
     val isValidForm: Boolean = isValidName && isValidMobile && isValidPassword
 
-
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,

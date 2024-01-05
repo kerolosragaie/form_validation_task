@@ -19,9 +19,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -31,6 +34,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kerollosragaie.appvalidation.R
@@ -55,14 +59,11 @@ fun PasswordFormField(
     val trailingIconId =
         if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility_on
 
-    var isPasswordValid by rememberSaveable {
-        mutableStateOf(false)
-    }
+    var isPasswordValid by rememberSaveable { mutableStateOf(false) }
     //! 1- user type letter => a
     //! 2- recomposition happens
     //! 3- text value is updated and isPasswordValid value
     onValueChange(text, isPasswordValid)
-
 
     Column(
         modifier = modifier,
@@ -115,12 +116,13 @@ fun PasswordFormField(
         )
 
         PasswordValidationType.entries.forEach { passwordValidationType ->
-            isPasswordValid = validator.handlePasswordValidation(text, passwordValidationType)
+            passwordValidationType.isValid = validator.handlePasswordValidation(text, passwordValidationType)
+            isPasswordValid = PasswordValidationType.entries.all { it.isValid }
 
             Spacer(modifier = Modifier.height(2.dp))
             ValidationText(
                 text = passwordValidationType.stringResource,
-                isValid = isPasswordValid
+                isValid = passwordValidationType.isValid
             )
         }
 
@@ -132,7 +134,7 @@ private fun ValidationText(@StringRes text: Int, isValid: Boolean) {
     val iconResource = if (isValid) R.drawable.ic_check else R.drawable.ic_close
     val color = when (isValid) {
         true -> Color.Green
-        false -> Color.Red
+        false -> MaterialTheme.colorScheme.error
     }
 
     Row {
@@ -145,7 +147,10 @@ private fun ValidationText(@StringRes text: Int, isValid: Boolean) {
         }
         Spacer(modifier = Modifier.width(4.dp))
         Text(
+            modifier = Modifier.fillMaxWidth(0.8f),
             text = stringResource(id = text),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             color = color,
         )
     }
