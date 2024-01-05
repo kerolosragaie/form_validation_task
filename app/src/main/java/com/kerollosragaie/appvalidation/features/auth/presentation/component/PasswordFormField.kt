@@ -120,26 +120,14 @@ fun PasswordFormField(
             }
         )
 
-        Spacer(modifier = Modifier.height(2.dp))
-
-        ValidationText(
-            text = R.string.the_password_needs_to_consist_of_at_least_8_characters,
-            isValid = isTextLength8,
-        )
-
-        Spacer(modifier = Modifier.height(2.dp))
-
-        ValidationText(
-            text = R.string.the_password_should_contain_at_least_special_character,
-            isValid = hasSpecialChar,
-        )
-
-        Spacer(modifier = Modifier.height(2.dp))
-
-        ValidationText(
-            text = R.string.the_password_needs_to_contain_at_least_one_letter_and_digit,
-            isValid = isContainLettersAndDigits,
-        )
+        PasswordValidationType.entries.forEach { passwordValidationType ->
+            Spacer(modifier = Modifier.height(2.dp))
+            ValidationText(
+                text = passwordValidationType.stringResource,
+                isValid = validator.handlePasswordValidation(text, passwordValidationType)
+            )
+        }
+        
     }
 }
 

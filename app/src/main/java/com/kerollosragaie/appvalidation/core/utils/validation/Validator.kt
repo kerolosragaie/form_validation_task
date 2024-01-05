@@ -18,7 +18,6 @@ class Validator : Validation {
                 Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]")
                     .matcher(text).find()
             }
-
             PasswordValidationType.AT_LEAST_ONE_LETTER_AND_DIGIT -> {
                 text.any { it.isDigit() } && text.any { it.isLetter() }
             }
