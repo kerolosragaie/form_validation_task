@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,8 +17,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -32,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kerollosragaie.appvalidation.R
+import com.kerollosragaie.appvalidation.features.auth.presentation.component.FormFieldsSemanticsDescription
 
 enum class TextFieldType {
     Number,
@@ -69,7 +71,8 @@ fun CustomTextField(
         TextField(
             modifier = modifier
                 .background(color = color, shape = RoundedCornerShape(cornerRadius))
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag(FormFieldsSemanticsDescription.FULL_NAME_FIELD_TAG),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,
                 keyboardType = when (type) {
@@ -114,7 +117,10 @@ fun CustomTextField(
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 modifier = Modifier
-                    .fillMaxWidth(0.8f),
+                    .fillMaxWidth(0.8f)
+                    .semantics {
+                        this.contentDescription = FormFieldsSemanticsDescription.ERROR_MESSAGE_ID
+                    },
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 text = stringResource(id = it),

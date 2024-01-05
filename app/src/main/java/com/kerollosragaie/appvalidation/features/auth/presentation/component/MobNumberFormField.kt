@@ -19,7 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,6 +49,7 @@ fun MobNumberFormField(
     //! onValueChange should be here, to callback the updated value
     //! otherwise use view-model to pass data between composable func.
     //! and view-model, (we pass states between Composables not view-model)
+    onValueChange(text, mobileValidationString == null)
 
     Column(
         modifier = modifier,
@@ -56,7 +60,8 @@ fun MobNumberFormField(
                     color = MaterialTheme.colorScheme.onPrimary,
                     shape = RoundedCornerShape(2.dp),
                 )
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag(FormFieldsSemanticsDescription.MOB_NUMBER_FIELD_TAG),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,
                 keyboardType = KeyboardType.Password,
@@ -66,7 +71,6 @@ fun MobNumberFormField(
             textStyle = MaterialTheme.typography.bodyMedium,
             onValueChange = {
                 text = it
-                onValueChange(it, mobileValidationString == null)
             },
             colors = TextFieldDefaults.colors(
                 disabledTextColor = Color.Transparent,
@@ -93,19 +97,16 @@ fun MobNumberFormField(
 
 @Composable
 private fun ValidationText(@StringRes text: Int?) {
-    val color = if (text == null)
-        Color.Green
-    else
-        MaterialTheme.colorScheme.error
-
     text?.let {
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-            modifier = Modifier.fillMaxWidth(0.8f),
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .testTag(FormFieldsSemanticsDescription.ERROR_MESSAGE_ID),
             text = stringResource(id = text),
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            color = color,
+            color = MaterialTheme.colorScheme.error,
         )
     }
 }

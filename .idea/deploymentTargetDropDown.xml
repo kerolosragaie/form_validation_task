@@ -2,27 +2,49 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="PrevSignInScreen">
-        <State>
-          <runningDeviceTargetSelectedWithDropDown>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="SERIAL_NUMBER" />
-                  <value value="A1418AA001860" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-03T20:33:26.952917900Z" />
-        </State>
+      <entry key="MobNumberFormField_CallbackCorrectValuesOnChange()">
+        <State />
       </entry>
-      <entry key="PrevSignUp">
+      <entry key="MobNumberFormField_isValidating()">
         <State />
       </entry>
       <entry key="app">
         <State />
+      </entry>
+      <entry key="fullNameFormField_isErrorMessageShow()">
+        <State />
+      </entry>
+      <entry key="fullNameFormField_isValid() (1)">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Kerollos\.android\avd\Tiramisu_Mob.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-01-05T19:43:50.456673300Z" />
+        </State>
+      </entry>
+      <entry key="mobNumberFormField_CallbackCorrectValuesOnChange()">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Kerollos\.android\avd\Tiramisu_Mob.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-01-05T20:54:01.723143500Z" />
+        </State>
       </entry>
     </value>
   </component>

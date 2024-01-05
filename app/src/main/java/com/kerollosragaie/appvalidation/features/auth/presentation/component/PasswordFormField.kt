@@ -19,14 +19,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -74,7 +72,8 @@ fun PasswordFormField(
                     color = MaterialTheme.colorScheme.onPrimary,
                     shape = RoundedCornerShape(2.dp),
                 )
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag(FormFieldsSemanticsDescription.PASSWORD_FIELD_TAG),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,
                 keyboardType = KeyboardType.Password,
@@ -141,13 +140,15 @@ private fun ValidationText(@StringRes text: Int, isValid: Boolean) {
         AnimatedContent(targetState = iconResource, label = "") { icon ->
             Icon(
                 painter = painterResource(id = icon),
-                contentDescription = null,
+                contentDescription = iconResource.toString(),
                 tint = color,
             )
         }
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            modifier = Modifier.fillMaxWidth(0.8f),
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .testTag(FormFieldsSemanticsDescription.ERROR_MESSAGE_ID),
             text = stringResource(id = text),
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
