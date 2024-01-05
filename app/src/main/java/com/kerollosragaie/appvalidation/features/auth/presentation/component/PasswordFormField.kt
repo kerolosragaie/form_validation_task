@@ -55,20 +55,14 @@ fun PasswordFormField(
     val trailingIconId =
         if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility_on
 
-    val isTextLength8 = validator.handlePasswordValidation(text, PasswordValidationType.AT_LEAST_8)
-    val hasSpecialChar =
-        validator.handlePasswordValidation(text, PasswordValidationType.AT_LEAST_ONE_SPECIAL_CHAR)
-    val isContainLettersAndDigits =
-        validator.handlePasswordValidation(
-            text,
-            PasswordValidationType.AT_LEAST_ONE_LETTER_AND_DIGIT
-        )
-    val isPasswordValid = isTextLength8 && hasSpecialChar && isContainLettersAndDigits
-
+    var isPasswordValid by rememberSaveable {
+        mutableStateOf(false)
+    }
     //! 1- user type letter => a
     //! 2- recomposition happens
     //! 3- text value is updated and isPasswordValid value
     onValueChange(text, isPasswordValid)
+
 
     Column(
         modifier = modifier,
@@ -121,13 +115,15 @@ fun PasswordFormField(
         )
 
         PasswordValidationType.entries.forEach { passwordValidationType ->
+            isPasswordValid = validator.handlePasswordValidation(text, passwordValidationType)
+
             Spacer(modifier = Modifier.height(2.dp))
             ValidationText(
                 text = passwordValidationType.stringResource,
-                isValid = validator.handlePasswordValidation(text, passwordValidationType)
+                isValid = isPasswordValid
             )
         }
-        
+
     }
 }
 
