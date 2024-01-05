@@ -13,12 +13,13 @@ import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomTextField
 import com.kerollosragaie.appvalidation.core.components.TextFieldType
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
-import com.kerollosragaie.appvalidation.features.auth.presentation.state.ValidationResultState
+import com.kerollosragaie.appvalidation.core.utils.validation.Validator
 
 @Composable
 fun FullNameFormField(
     @StringRes hint: Int = R.string.full_name,
-    onValueChange: (validationResultState: ValidationResultState) -> Unit
+    validator: Validator,
+    onValueChange: (text: String, isValid: Boolean) -> Unit
 ) {
 
     var text by rememberSaveable {
@@ -27,43 +28,35 @@ fun FullNameFormField(
 
     //! will not work as recomposition happens but validator will work with old value
     //! Q) why will work with old value?
-    //! A) bec. validateNameField() function works with text var in same level
-    //! i.e: both validateNameField() function and text var in same composable function
-    //! so to make validateNameField() function work should pass data from/to view-model
-    val validator = validateNameField(text)
+    //! A) bec. handleNameValidation() function works with text var in same level
+    //! i.e: both handleNameValidation() function and text var in same composable function
+    //! so to make handleNameValidation() function work should pass data from/to view-model
+    //! but as state (using data classes)
+    //! And if don't want to use view-model so add the onValueChange func. callback
+    //! Before Composable func. to call back values probably
+    val nameValidationString: Int? = validator.handleNameValidation(text)
+
+    onValueChange(text, nameValidationString == null)
 
     CustomTextField(
         modifier = Modifier.fillMaxWidth(0.85f),
         text = text,
-        errorMessageId = validator.errorMessageId,
+        errorMessageId = nameValidationString,
         hint = hint,
         onValueChange = {
             text = it
-            onValueChange(validator)
         },
         type = TextFieldType.Text,
     )
 }
 
-private fun validateNameField(text: String): ValidationResultState {
-    val validationResultState: ValidationResultState by lazy { ValidationResultState() }
-
-    return if (text.isEmpty()) {
-        validationResultState.copy(
-            isValid = false,
-            errorMessageId = R.string.the_field_can_not_be_blank,
-        )
-    } else {
-        validationResultState.copy(isValid = true)
-    }
-}
-
-@Preview(showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
 fun PrevFullNameFormField() {
     AppValidationTheme {
         FullNameFormField(
-            onValueChange = { _ ->
+            validator = Validator(),
+            onValueChange = { _, _ ->
             },
         )
     }

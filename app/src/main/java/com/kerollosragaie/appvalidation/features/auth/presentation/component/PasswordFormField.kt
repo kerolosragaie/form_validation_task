@@ -20,7 +20,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -43,6 +42,7 @@ import com.kerollosragaie.appvalidation.core.utils.validation.Validator
 @Composable
 fun PasswordFormField(
     modifier: Modifier = Modifier,
+    validator: Validator,
     @StringRes hint: Int = R.string.password,
     onValueChange: (text: String, isValid: Boolean) -> Unit
 ) {
@@ -55,11 +55,11 @@ fun PasswordFormField(
     val trailingIconId =
         if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility_on
 
-    val isTextLength8 = Validator.handlePasswordValidation(text, PasswordValidationType.AT_LEAST_8)
+    val isTextLength8 = validator.handlePasswordValidation(text, PasswordValidationType.AT_LEAST_8)
     val hasSpecialChar =
-        Validator.handlePasswordValidation(text, PasswordValidationType.AT_LEAST_ONE_SPECIAL_CHAR)
+        validator.handlePasswordValidation(text, PasswordValidationType.AT_LEAST_ONE_SPECIAL_CHAR)
     val isContainLettersAndDigits =
-        Validator.handlePasswordValidation(
+        validator.handlePasswordValidation(
             text,
             PasswordValidationType.AT_LEAST_ONE_LETTER_AND_DIGIT
         )
@@ -173,6 +173,7 @@ private fun ValidationText(@StringRes text: Int, isValid: Boolean) {
 fun PrevPasswordFormField() {
     AppValidationTheme {
         PasswordFormField(
+            validator = Validator(),
             onValueChange = { _, _ -> }
         )
     }

@@ -1,7 +1,6 @@
 package com.kerollosragaie.appvalidation.features.auth.presentation.signup
 
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -24,13 +23,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.kerollosragaie.appvalidation.R
 import com.kerollosragaie.appvalidation.core.components.CustomButton
 import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
+import com.kerollosragaie.appvalidation.core.utils.validation.Validator
 import com.kerollosragaie.appvalidation.features.auth.presentation.component.FullNameFormField
 import com.kerollosragaie.appvalidation.features.auth.presentation.component.MobNumberFormField
 import com.kerollosragaie.appvalidation.features.auth.presentation.component.PasswordFormField
 
 @Composable
 fun SignUpScreen(
-    viewModel: SingUpViewModel = hiltViewModel(),
+    viewModel: SignUpViewModel = hiltViewModel(),
     navigateToSignIn: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -77,8 +77,9 @@ fun SignUpScreen(
 
 
         FullNameFormField(
-            onValueChange = { validationResultState ->
-                isValidName = validationResultState.isValid
+            validator = viewModel.validator,
+            onValueChange = { _, isValid ->
+                isValidName = isValid
             },
         )
 
@@ -86,6 +87,7 @@ fun SignUpScreen(
 
         MobNumberFormField(
             modifier = Modifier.fillMaxWidth(0.85f),
+            validator = viewModel.validator,
             onValueChange = { _, isValid ->
                 isValidMobile = isValid
             },
@@ -95,6 +97,7 @@ fun SignUpScreen(
 
         PasswordFormField(
             modifier = Modifier.fillMaxWidth(0.85f),
+            validator = viewModel.validator,
             onValueChange = { _, isValid ->
                 isValidPassword = isValid
             },
@@ -120,7 +123,8 @@ fun SignUpScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun PrevSignUp() {
-    val viewModel = SingUpViewModel()
+    val viewModel =  SignUpViewModel(Validator())
+
     AppValidationTheme {
         SignUpScreen(viewModel = viewModel) {
 

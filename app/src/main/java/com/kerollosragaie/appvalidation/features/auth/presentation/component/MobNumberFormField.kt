@@ -32,6 +32,7 @@ import com.kerollosragaie.appvalidation.core.utils.validation.Validator
 @Composable
 fun MobNumberFormField(
     modifier: Modifier = Modifier,
+    validator: Validator,
     @StringRes hint: Int = R.string.mobile_number,
     onValueChange: (text: String, isValid: Boolean) -> Unit
 ) {
@@ -39,11 +40,11 @@ fun MobNumberFormField(
         mutableStateOf("")
     }
 
-    val mobileValidationString: Int? = Validator.handleMobileValidation(text)
+    val mobileValidationString: Int? = validator.handleMobileValidation(text)
 
     //! onValueChange should be here, to callback the updated value
     //! otherwise use view-model to pass data between composable func.
-    //! and view-model
+    //! and view-model, (we pass states between Composables not view-model)
 
     Column(
         modifier = modifier,
@@ -109,6 +110,7 @@ private fun ValidationText(@StringRes text: Int?) {
 fun PrevMobileFormField() {
     AppValidationTheme {
         MobNumberFormField(
+            validator = Validator(),
             onValueChange = { _, _ -> }
         )
     }
