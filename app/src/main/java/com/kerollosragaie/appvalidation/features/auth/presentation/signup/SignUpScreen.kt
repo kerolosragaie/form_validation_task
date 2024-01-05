@@ -1,6 +1,7 @@
 package com.kerollosragaie.appvalidation.features.auth.presentation.signup
 
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -74,6 +75,7 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(40.dp))
 
+
         FullNameFormField(
             onValueChange = { validationResultState ->
                 isValidName = validationResultState.isValid
@@ -83,16 +85,18 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         MobNumberFormField(
-            onValueChange = { validationResultState ->
-                isValidMobile = validationResultState.isValid
+            modifier = Modifier.fillMaxWidth(0.85f),
+            onValueChange = { _, isValid ->
+                isValidMobile = isValid
             },
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         PasswordFormField(
-            onValueChange = { validationResultState ->
-                isValidPassword = validationResultState.isValid
+            modifier = Modifier.fillMaxWidth(0.85f),
+            onValueChange = { _, isValid ->
+                isValidPassword = isValid
             },
         )
 

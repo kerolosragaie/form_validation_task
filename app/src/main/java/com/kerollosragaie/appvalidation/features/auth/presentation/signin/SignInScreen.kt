@@ -1,5 +1,6 @@
 package com.kerollosragaie.appvalidation.features.auth.presentation.signin
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -74,16 +75,18 @@ fun SignInScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         MobNumberFormField(
-            onValueChange = { validationResultState ->
-                isValidMobile = validationResultState.isValid
+            modifier = Modifier.fillMaxWidth(0.85f),
+            onValueChange = { _,isValid ->
+                isValidMobile = isValid
             },
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         PasswordFormField(
-            onValueChange = { validationResultState ->
-                isValidPassword = validationResultState.isValid
+            modifier = Modifier.fillMaxWidth(0.85f),
+            onValueChange = { _,isValid ->
+                isValidPassword = isValid
             },
         )
 

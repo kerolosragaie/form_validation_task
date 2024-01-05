@@ -3,6 +3,10 @@ package com.kerollosragaie.appvalidation.core.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -52,7 +56,8 @@ fun NavigationGraph(
         composable(
             route = Screen.SignUpScreen.route,
         ) {
-            SignUpScreen {
+
+            SignUpScreen() {
                 navHostController.popBackStack()
             }
         }

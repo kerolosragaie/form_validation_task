@@ -1,68 +1,179 @@
 package com.kerollosragaie.appvalidation.features.auth.presentation.component
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.kerollosragaie.appvalidation.R
-import com.kerollosragaie.appvalidation.core.components.CustomTextField
-import com.kerollosragaie.appvalidation.core.components.TextFieldType
-import com.kerollosragaie.appvalidation.features.auth.presentation.state.ValidationResultState
-import java.util.regex.Pattern
+import com.kerollosragaie.appvalidation.core.theme.AppValidationTheme
+import com.kerollosragaie.appvalidation.core.utils.validation.enums.PasswordValidationType
+import com.kerollosragaie.appvalidation.core.utils.validation.Validator
+
 
 @Composable
 fun PasswordFormField(
+    modifier: Modifier = Modifier,
     @StringRes hint: Int = R.string.password,
-    onValueChange: (validationResultState: ValidationResultState) -> Unit
+    onValueChange: (text: String, isValid: Boolean) -> Unit
 ) {
     var text by rememberSaveable {
         mutableStateOf("")
     }
 
-    CustomTextField(
-        modifier = Modifier.fillMaxWidth(0.85f),
-        text = text,
-        errorMessageId = validatePasswordField(text).errorMessageId,
-        hint = hint,
-        onValueChange = {
-            text = it
-            onValueChange(validatePasswordField(text))
-        },
-        type = TextFieldType.Password,
-    )
+    var passwordVisible by rememberSaveable { mutableStateOf(true) }
+
+    val trailingIconId =
+        if (passwordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility_on
+
+    val isTextLength8 = Validator.handlePasswordValidation(text, PasswordValidationType.AT_LEAST_8)
+    val hasSpecialChar =
+        Validator.handlePasswordValidation(text, PasswordValidationType.AT_LEAST_ONE_SPECIAL_CHAR)
+    val isContainLettersAndDigits =
+        Validator.handlePasswordValidation(
+            text,
+            PasswordValidationType.AT_LEAST_ONE_LETTER_AND_DIGIT
+        )
+    val isPasswordValid = isTextLength8 && hasSpecialChar && isContainLettersAndDigits
+
+    //! 1- user type letter => a
+    //! 2- recomposition happens
+    //! 3- text value is updated and isPasswordValid value
+    onValueChange(text, isPasswordValid)
+
+    Column(
+        modifier = modifier,
+    ) {
+        TextField(
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    shape = RoundedCornerShape(2.dp),
+                )
+                .fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.None,
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next,
+            ),
+            value = text,
+            textStyle = MaterialTheme.typography.bodyMedium,
+            onValueChange = {
+                text = it
+            },
+            colors = TextFieldDefaults.colors(
+                disabledTextColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+            ),
+            label = {
+                Text(
+                    text = stringResource(id = hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    softWrap = true,
+                )
+            },
+
+            visualTransformation = if (passwordVisible)
+                PasswordVisualTransformation()
+            else
+                VisualTransformation.None,
+
+            trailingIcon = {
+                Icon(
+                    modifier = Modifier.clickable {
+                        passwordVisible = !passwordVisible
+                    },
+                    painter = painterResource(id = trailingIconId),
+                    contentDescription = "password",
+                )
+            }
+        )
+
+        Spacer(modifier = Modifier.height(2.dp))
+
+        ValidationText(
+            text = R.string.the_password_needs_to_consist_of_at_least_8_characters,
+            isValid = isTextLength8,
+        )
+
+        Spacer(modifier = Modifier.height(2.dp))
+
+        ValidationText(
+            text = R.string.the_password_should_contain_at_least_special_character,
+            isValid = hasSpecialChar,
+        )
+
+        Spacer(modifier = Modifier.height(2.dp))
+
+        ValidationText(
+            text = R.string.the_password_needs_to_contain_at_least_one_letter_and_digit,
+            isValid = isContainLettersAndDigits,
+        )
+    }
 }
 
-private fun validatePasswordField(text: String): ValidationResultState {
-    val validationResultState: ValidationResultState by lazy { ValidationResultState() }
+@Composable
+private fun ValidationText(@StringRes text: Int, isValid: Boolean) {
+    val iconResource = if (isValid) R.drawable.ic_check else R.drawable.ic_close
+    val color = when (isValid) {
+        true -> Color.Green
+        false -> Color.Red
+    }
 
-    val isContainLettersAndDigits = text.any { it.isDigit() } && text.any { it.isLetter() }
-    val specialChar: Pattern = Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]")
+    Row {
+        AnimatedContent(targetState = iconResource, label = "") { icon ->
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                tint = color,
+            )
+        }
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = stringResource(id = text),
+            color = color,
+        )
+    }
+}
 
-    return if (text.isBlank()) {
-        validationResultState.copy(
-            isValid = false,
-            errorMessageId = R.string.the_field_can_not_be_blank
+
+@Preview(showBackground = true)
+@Composable
+fun PrevPasswordFormField() {
+    AppValidationTheme {
+        PasswordFormField(
+            onValueChange = { _, _ -> }
         )
-    } else if (text.length < 8) {
-        validationResultState.copy(
-            isValid = false,
-            errorMessageId = R.string.the_password_needs_to_consist_of_at_least_8_characters
-        )
-    } else if (!specialChar.matcher(text).find()) {
-        validationResultState.copy(
-            isValid = false,
-            errorMessageId = R.string.the_password_should_contain_at_least_special_character
-        )
-    } else if (!isContainLettersAndDigits) {
-        validationResultState.copy(
-            isValid = false,
-            errorMessageId = R.string.the_password_needs_to_contain_at_least_one_letter_and_digit
-        )
-    } else {
-        validationResultState.copy(isValid = true)
     }
 }
