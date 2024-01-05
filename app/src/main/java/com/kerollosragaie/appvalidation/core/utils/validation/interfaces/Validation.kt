@@ -2,7 +2,7 @@ package com.kerollosragaie.appvalidation.core.utils.validation.interfaces
 
 import com.kerollosragaie.appvalidation.core.utils.validation.enums.PasswordValidationType
 
-interface Validation {
+internal interface Validation {
     fun handlePasswordValidation(
         text: String,
         passwordValidationType: PasswordValidationType
