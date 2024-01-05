@@ -14,10 +14,14 @@ class Validator : Validation {
     ): Boolean =
         when (passwordValidationType) {
             PasswordValidationType.AT_LEAST_8 -> text.length >= 8
-            PasswordValidationType.AT_LEAST_ONE_SPECIAL_CHAR -> Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]")
-                .matcher(text).find()
+            PasswordValidationType.AT_LEAST_ONE_SPECIAL_CHAR -> {
+                Pattern.compile("[!@#$%&*()_+=|<>?{}\\[\\]~-]")
+                    .matcher(text).find()
+            }
 
-            PasswordValidationType.AT_LEAST_ONE_LETTER_AND_DIGIT -> text.any { it.isDigit() } && text.any { it.isLetter() }
+            PasswordValidationType.AT_LEAST_ONE_LETTER_AND_DIGIT -> {
+                text.any { it.isDigit() } && text.any { it.isLetter() }
+            }
         }
 
     override fun handleMobileValidation(
