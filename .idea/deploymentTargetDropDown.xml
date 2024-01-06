@@ -2,49 +2,23 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="MobNumberFormField_CallbackCorrectValuesOnChange()">
+      <entry key="MobNumberFormFieldTesting">
         <State />
       </entry>
-      <entry key="MobNumberFormField_isValidating()">
+      <entry key="PasswordFormFieldTesting">
         <State />
       </entry>
       <entry key="app">
         <State />
       </entry>
-      <entry key="fullNameFormField_isErrorMessageShow()">
+      <entry key="isValidating()">
         <State />
       </entry>
-      <entry key="fullNameFormField_isValid() (1)">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Kerollos\.android\avd\Tiramisu_Mob.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-05T19:43:50.456673300Z" />
-        </State>
+      <entry key="mobile_containsOtherValuesThenNumbers()">
+        <State />
       </entry>
-      <entry key="mobNumberFormField_CallbackCorrectValuesOnChange()">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Kerollos\.android\avd\Tiramisu_Mob.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-01-05T20:54:01.723143500Z" />
-        </State>
+      <entry key="passwordNotContain_Letters()">
+        <State />
       </entry>
     </value>
   </component>

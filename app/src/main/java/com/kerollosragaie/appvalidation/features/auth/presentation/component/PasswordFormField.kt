@@ -27,6 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -105,17 +107,20 @@ fun PasswordFormField(
 
             trailingIcon = {
                 Icon(
-                    modifier = Modifier.clickable {
-                        passwordVisible = !passwordVisible
-                    },
+                    modifier = Modifier
+                        .clickable {
+                            passwordVisible = !passwordVisible
+                        }
+                        .testTag(FormFieldsSemanticsDescription.PASSWORD_VISIBLE_ICON_TAG),
                     painter = painterResource(id = trailingIconId),
-                    contentDescription = "password",
+                    contentDescription = "password visible icon",
                 )
             }
         )
 
         PasswordValidationType.entries.forEach { passwordValidationType ->
-            passwordValidationType.isValid = validator.handlePasswordValidation(text, passwordValidationType)
+            passwordValidationType.isValid =
+                validator.handlePasswordValidation(text, passwordValidationType)
             isPasswordValid = PasswordValidationType.entries.all { it.isValid }
 
             Spacer(modifier = Modifier.height(2.dp))
@@ -133,7 +138,7 @@ private fun ValidationText(@StringRes text: Int, isValid: Boolean) {
     val iconResource = if (isValid) R.drawable.ic_check else R.drawable.ic_close
     val color = when (isValid) {
         true -> Color.Green
-        false -> MaterialTheme.colorScheme.error
+        false -> Color.Red
     }
 
     Row {
