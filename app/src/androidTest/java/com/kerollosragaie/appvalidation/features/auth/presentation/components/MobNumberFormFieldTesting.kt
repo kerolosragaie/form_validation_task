@@ -55,15 +55,14 @@ class MobNumberFormFieldTesting {
         if (expectedToBeValid) {
             // Is error message not appeared?
             testRule.onNodeWithTag(ERROR_MESSAGE_ID).assertDoesNotExist()
-
         } else {
             // Is error message appeared?
             testRule.onNodeWithTag(ERROR_MESSAGE_ID).assertExists()
         }
-        //Is numbers length is 11? and message not appeared?
+        //Is textCallBack == entered mobNumber
         testRule.onNodeWithTag(MOB_NUMBER_FIELD_TAG)
             .assertTextEquals(textFieldHintName, textCallBack)
-        //Is call back isValid param == true
+        //Is call back isValid param == expectedToBeValid
         assertEquals(expectedToBeValid, isValidCallBack)
     }
 
