@@ -18,12 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kerollosragaie.appvalidation.R
+import com.kerollosragaie.appvalidation.features.auth.presentation.component.FormFieldsSemanticsDescription.SUBMIT_FORM_BUTTON
 
 
 @Composable
@@ -39,29 +41,32 @@ fun CustomButton(
     borderColor: Color = color,
     gradient: Brush? = null
 ) {
+    val buttonGradientColors = Brush.horizontalGradient(
+        listOf(
+            MaterialTheme.colorScheme.primary,
+            MaterialTheme.colorScheme.inversePrimary,
+        )
+    )
+
     Button(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier
+            .testTag(SUBMIT_FORM_BUTTON),
         enabled = enabled,
         contentPadding = PaddingValues(vertical = 5.dp),
         colors = ButtonDefaults.buttonColors(containerColor = color),
         shape = RoundedCornerShape(cornerRadius),
         border = BorderStroke(width = borderWidth, color = borderColor)
     ) {
-
-        if (gradient == null) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(cornerRadius))
+                .background(brush = gradient ?: buttonGradientColors)
+                .then(modifier.padding(vertical = 5.dp)),
+            contentAlignment = Alignment.Center,
+        ) {
             Text(text = stringResource(id = textId), style = textStyle)
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(cornerRadius))
-                    .background(brush = gradient)
-                    .then(modifier.padding(vertical = 5.dp)),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(text = stringResource(id = textId), style = textStyle)
-            }
         }
     }
 }
@@ -71,7 +76,7 @@ fun CustomButton(
 @Composable
 fun PrevCustomButton() {
     CustomButton(
-        textId = R.string.full_name,
+        textId = R.string.sign_up,
         onClick = {},
     )
 }
