@@ -138,7 +138,7 @@ private fun ValidationText(@StringRes text: Int, isValid: Boolean) {
     val iconResource = if (isValid) R.drawable.ic_check else R.drawable.ic_close
     val color = when (isValid) {
         true -> Color.Green
-        false -> Color.Red
+        false -> MaterialTheme.colorScheme.error
     }
 
     Row {

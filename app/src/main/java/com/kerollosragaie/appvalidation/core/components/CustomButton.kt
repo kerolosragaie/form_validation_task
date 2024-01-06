@@ -3,17 +3,14 @@ package com.kerollosragaie.appvalidation.core.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -41,9 +38,9 @@ fun CustomButton(
     borderColor: Color = color,
     gradient: Brush? = null
 ) {
-    val buttonGradientColors = Brush.horizontalGradient(
+    val buttonGradientColors = gradient ?: Brush.horizontalGradient(
         listOf(
-            MaterialTheme.colorScheme.primary,
+            MaterialTheme.colorScheme.inverseSurface,
             MaterialTheme.colorScheme.inversePrimary,
         )
     )
@@ -51,6 +48,9 @@ fun CustomButton(
     Button(
         onClick = onClick,
         modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(cornerRadius))
+            .background( brush = buttonGradientColors)
             .testTag(SUBMIT_FORM_BUTTON),
         enabled = enabled,
         contentPadding = PaddingValues(vertical = 5.dp),
@@ -58,16 +58,7 @@ fun CustomButton(
         shape = RoundedCornerShape(cornerRadius),
         border = BorderStroke(width = borderWidth, color = borderColor)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(cornerRadius))
-                .background(brush = gradient ?: buttonGradientColors)
-                .then(modifier.padding(vertical = 5.dp)),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(text = stringResource(id = textId), style = textStyle)
-        }
+        Text(text = stringResource(id = textId), style = textStyle)
     }
 }
 
