@@ -28,6 +28,8 @@ class PasswordFormFieldTesting {
     private var isValidCallBack: Boolean = false
 
     private fun setPasswordFormField() {
+        isValidCallBack = false
+
         testRule.setContent {
             AppValidationTheme {
                 PasswordFormField(
