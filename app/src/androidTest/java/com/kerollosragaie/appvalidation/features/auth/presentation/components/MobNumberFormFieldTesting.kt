@@ -28,6 +28,7 @@ class MobNumberFormFieldTesting {
 
     private fun setMobNumberFormField() {
         isValidCallBack = false
+        textCallBack = ""
 
         testRule.setContent {
             AppValidationTheme {
