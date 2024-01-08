@@ -3,7 +3,20 @@
   <component name="deploymentTargetDropDown">
     <value>
       <entry key="FullNameFormFieldTesting">
-        <State />
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Kerollos\.android\avd\Tiramisu_Mob.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-01-08T18:58:15.706085400Z" />
+        </State>
       </entry>
       <entry key="MobNumberFormFieldTesting">
         <State />
@@ -11,13 +24,13 @@
       <entry key="app">
         <State />
       </entry>
-      <entry key="isValidating()">
-        <State />
-      </entry>
       <entry key="mobile_containsOtherValuesThenNumbers()">
         <State />
       </entry>
-      <entry key="passwordNotContain_Letters()">
+      <entry key="submitButtonIsEnabled()">
+        <State />
+      </entry>
+      <entry key="submitButton_IsNotEnabled()">
         <State />
       </entry>
     </value>
